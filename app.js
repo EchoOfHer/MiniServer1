@@ -12,37 +12,17 @@ app.use(express.urlencoded({ extended: true }));
 //login
 
 //All expense
-// Get ALL expenses
-app.get("/expenses", (req, res) => {
-  const sql = "SELECT * FROM expenses";
-  con.query(sql, (err, results) => {
-    if (err) return res.status(500).send("Database error");
-    res.json(results);
-  });
+app.get('/expenses/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const userExpenses = expenses.filter(exp => exp.userId === userId);
+  
+  if (userExpenses.length > 0) {
+    res.status(200).json({ expenses: userExpenses });
+  } else {
+    res.status(404).json({ message: 'No expenses found for this user' });
+  }
 });
 
-// Get expenses for a specific user
-app.get("/expenses/:userId", (req, res) => {
-  const { userId } = req.params;
-  const sql = "SELECT * FROM expenses WHERE userId = ?";
-  con.query(sql, [userId], (err, results) => {
-    if (err) return res.status(500).send("Database error");
-    res.json(results);
-  });
-});
-
-// Add a new expense
-app.post("/expenses", (req, res) => {
-  const { userId, item, paid, date } = req.body;
-  const sql =
-    "INSERT INTO expenses (userId, item, paid, date) VALUES (?, ?, ?, ?)";
-  con.query(sql, [userId, item, paid, date], (err, result) => {
-    if (err) return res.status(500).send("Database error");
-    res
-      .status(201)
-      .json({ id: result.insertId, userId, item, paid, date });
-  });
-});
  
 //Todays expense
 
