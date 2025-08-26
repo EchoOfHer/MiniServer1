@@ -21,17 +21,27 @@ app.use(express.urlencoded({ extended: true }));
 
 //delete
 app.delete('/deleteexpense', async (req, res) => {
-  const { expense_id } = req.body;
-  if (!expense_id) return res.status(400).send("Missing expense ID");
+  const { user_id, expense_id } = req.body;
+
+  if (!user_id || !expense_id) {
+    return res.status(400).json({ error: "Missing user_id or expense_id" });
+  }
 
   try {
-    await db.query("DELETE FROM expenses WHERE id = ?", [expense_id]);
-    res.send("Deleted successfully");
+    const result = await db.query(
+      "DELETE FROM expenses WHERE id = ? AND user_id = ?",
+      [expense_id, user_id]
+    );
+
+    if (result.affectedRows > 0) {
+      res.json({ message: "Deleted successfully" });
+    } else {
+      res.status(404).json({ error: "Expense not found or unauthorized" });
+    }
   } catch (err) {
-    res.status(500).send("Error deleting expense");
+    res.status(500).json({ error: "Server error" });
   }
 });
-
 
 
 
