@@ -25,7 +25,35 @@ app.post('/register', (req, res) => {
     });
 });
 //login
-
+app.post('/login', (req, res) => {
+    const {username, password} = req.body;
+    const sql = "SELECT id, username, password FROM users WHERE username = ?";
+    con.query(sql, [username], function(err, results) {
+        if(err) {
+            return res.status(500).send("Database server error");
+        }
+        if(results.length != 1) {
+            return res.status(401).send("Invalid credentials.");
+        }
+        const user = results[0]; 
+        // compare passwords
+        bcrypt.compare(password, results[0].password, function(err, same) {
+            if(err) {
+                return res.status(500).send("Hashing error");
+            }
+            if(same) {
+                return res.status(200).json({
+                    message: 'Login successful!',
+                    user: { 
+                        id: user.id,          
+                        username: user.username 
+                    }
+                });
+            }
+            return res.status(401).send('Invalid credentials.');
+        });
+    })
+});
 //All expense
  
 //Todays expense
