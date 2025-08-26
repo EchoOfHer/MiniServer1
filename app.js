@@ -20,7 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 //adding
 
 //delete
-app.delete("/expenses/:id", (req, res) => {
+// DELETE expense by ID
+app.delete("/deleteexpense/:id", (req, res) => {
   const expenseId = req.params.id;
 
   const sql = "DELETE FROM expenses WHERE id = ?";
@@ -29,12 +30,15 @@ app.delete("/expenses/:id", (req, res) => {
       console.error("Error deleting expense:", err);
       return res.status(500).json({ message: "Database error" });
     }
+
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "Expense not found" });
     }
-    res.json({ message: "Expense deleted successfully" });
+
+    res.json({ message: `Expense ID ${expenseId} deleted successfully` });
   });
 });
+
 
 //connection
 app.listen(3000, () => {
