@@ -21,23 +21,28 @@ app.use(express.urlencoded({ extended: true }));
 
 //delete
 // DELETE expense by ID
-app.delete("/deleteexpense/:id", (req, res) => {
-  const expenseId = req.params.id;
+app.delete("/deleteexpense", (req, res) => {
+  const { user_id, expense_id } = req.body;
 
-  const sql = "DELETE FROM expenses WHERE id = ?";
-  con.query(sql, [expenseId], (err, result) => {
+  if (!user_id || !expense_id) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
+
+  const sql = "DELETE FROM expenses WHERE id = ? AND user_id = ?";
+  con.query(sql, [expense_id, user_id], (err, result) => {
     if (err) {
       console.error("Error deleting expense:", err);
       return res.status(500).json({ message: "Database error" });
     }
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Expense not found" });
+      return res.status(404).json({ message: "Expense not found or not owned by user" });
     }
 
-    res.json({ message: `Expense ID ${expenseId} deleted successfully` });
+    res.json({ message: "Expense deleted successfully" });
   });
 });
+
 
 
 //connection
