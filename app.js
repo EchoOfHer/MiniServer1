@@ -20,7 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 //adding
 
 //delete
-// DELETE expense by ID
 app.delete('/deleteexpense', async (req, res) => {
   const { expense_id } = req.body;
   if (!expense_id) return res.status(400).send("Missing expense ID");
