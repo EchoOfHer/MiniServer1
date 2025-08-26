@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //delete
 app.delete('/deleteexpense', async (req, res) => {
-  const { user_id, expense_id } = req.query;
+  const { user_id, expense_id } = req.body;
 
   if (!user_id || !expense_id) {
     return res.status(400).json({ error: "Missing user_id or expense_id" });
