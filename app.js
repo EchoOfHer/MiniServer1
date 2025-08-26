@@ -14,6 +14,20 @@ app.use(express.urlencoded({ extended: true }));
 //All expense
  
 //Todays expense
+app.get('/expenses/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const today = new Date().toISOString().substring(0, 10); // Get today's date in YYYY-MM-DD format
+  const userExpenses = expenses.filter(
+    exp => exp.userId === userId && exp.date === today
+  );
+  
+  if (userExpenses.length > 0) {
+    res.status(200).json(userExpenses); // Return array of today's expenses
+  } else {
+    res.status(404).json({ message: 'No expenses found for this user today' });
+  }
+});
+
 
 //seraching
 
