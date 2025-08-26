@@ -21,17 +21,7 @@ app.get("/expenses", (req, res) => {
   }
 });
 
-// ✅ Get expenses by userId
-app.get("/expenses/:userId", (req, res) => {
-  const userId = req.params.userId;
-  const userExpenses = expenses.filter(exp => exp.userId === userId);
 
-  if (userExpenses.length > 0) {
-    res.status(200).json({ expenses: userExpenses });
-  } else {
-    res.status(200).json({ expenses: [] });
-  }
-});
  
 //Todays expense
 
