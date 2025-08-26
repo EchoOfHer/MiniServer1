@@ -14,13 +14,11 @@ let expenses = [];
 
 //All expense
 app.get("/expenses", (req, res) => {
-  if (expenses.length > 0) {
-    res.status(200).json({ expenses });
-  } else {
-    res.status(200).json({ expenses: [] }); // safer than 404
-  }
+  res.status(200).json({
+    expenses: expenses.length > 0 ? expenses : [],
+    message: expenses.length === 0 ? "No expenses found" : undefined
+  });
 });
-
 
  
 //Todays expense
