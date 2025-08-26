@@ -21,14 +21,14 @@ app.use(express.urlencoded({ extended: true }));
 
 //delete
 app.delete('/deleteexpense', async (req, res) => {
-  const { user_id, expense_id } = req.body;
+  const { user_id, expense_id } = req.query;
 
   if (!user_id || !expense_id) {
     return res.status(400).json({ error: "Missing user_id or expense_id" });
   }
 
   try {
-    const result = await db.query(
+    const [result] = await promiseDb.query(
       "DELETE FROM expenses WHERE id = ? AND user_id = ?",
       [expense_id, user_id]
     );
@@ -39,6 +39,7 @@ app.delete('/deleteexpense', async (req, res) => {
       res.status(404).json({ error: "Expense not found or unauthorized" });
     }
   } catch (err) {
+    console.error("Delete error:", err); // สำคัญมาก
     res.status(500).json({ error: "Server error" });
   }
 });
