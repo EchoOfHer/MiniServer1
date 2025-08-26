@@ -5,6 +5,6 @@ const con = mysql.createConnection({
     password:'',
     database:'expense'
 })
-
+const db = connection.promise(); 
 
 module.exports = con;
