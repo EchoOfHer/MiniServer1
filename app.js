@@ -61,7 +61,22 @@ app.post('/login', (req, res) => {
 //seraching
 
 //adding
+app.post("/expenses", (req, res) => {
+  const { user_id, item, paid } = req.body;
 
+  if (!user_id || !item || !paid) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
+
+  const sql = "INSERT INTO expenses (user_id, item, paid, date) VALUES (?, ?, ?, NOW())";
+  con.query(sql, [user_id, item, paid], (err, result) => {
+    if (err) {
+      console.error("Error inserting expense:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
+    res.json({ message: "Expense added successfully", expenseId: result.insertId });
+  });
+});
 //delete
 
 //connection
