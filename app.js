@@ -18,14 +18,14 @@ app.use(express.urlencoded({ extended: true }));
 //seraching
 
 //adding
-app.post("/expenses", (req, res) => {
+app.post("/addexpenses", (req, res) => {
   const { user_id, item, paid } = req.body;
 
   if (!user_id || !item || !paid) {
     return res.status(400).json({ message: "Missing fields" });
   }
 
-  const sql = "INSERT INTO expenses (user_id, item, paid, date) VALUES (?, ?, ?, NOW())";
+  const sql = "INSERT INTO expense (user_id, item, paid, date) VALUES (?, ?, ?, NOW())";
   con.query(sql, [user_id, item, paid], (err, result) => {
     if (err) {
       console.error("Error inserting expense:", err);
