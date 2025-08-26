@@ -21,12 +21,11 @@ app.get("/expenses/today", (req, res) => {
 
   const todayExpenses = expenses.filter(exp => exp.date.startsWith(today));
 
-  if (todayExpenses.length === 0) {
-    return res.status(200).json({ expenses: [], message: "No expenses for today" });
-  }
-
-  res.status(200).json({ expenses: todayExpenses });
-})
+  res.status(200).json({
+    expenses: todayExpenses.length > 0 ? todayExpenses : [],
+    message: todayExpenses.length === 0 ? "No expenses for today" : undefined
+  });
+});
 
 //seraching
 
