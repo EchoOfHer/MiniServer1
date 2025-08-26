@@ -3,11 +3,11 @@ const app = express();
 const bcrypt = require('bcrypt');
 
 const con = require('./db');
-let expenses = []; // mutable array to store expenses
 
 //...........middleware........
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+let expenses = []; // mutable array to store expenses
 
 //register password just for input initial user data
 
