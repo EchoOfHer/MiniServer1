@@ -14,16 +14,17 @@ app.use(express.urlencoded({ extended: true }));
 //All expense
  
 //Todays expense
-app.get("/expenses/today/:userId", (req, res) => {
-  const userId = req.params.userId;
-  const today = new Date().toISOString().substring(0, 10); // YYYY-MM-DD
+app.get("/expenses/today", (req, res) => {
+  const today = new Date().toISOString().substring(0, 10);
+  const todayExpenses = expenses.filter(exp => exp.date.startsWith(today));
 
-  const todayExpenses = expenses.filter(
-    (exp) => exp.userId === userId && exp.date.startsWith(today)
-  );
+  if (todayExpenses.length === 0) {
+    return res.status(200).json({ expenses: [], message: "No expenses for today" });
+  }
 
   res.status(200).json({ expenses: todayExpenses });
-})
+});
+
 
 //seraching
 
