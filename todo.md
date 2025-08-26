@@ -12,5 +12,5 @@
 
     4. Beam 
         Branch : [⏳] Login-service
-        Branch : [⏳] Registration
+        
 
