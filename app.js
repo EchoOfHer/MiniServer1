@@ -20,30 +20,26 @@ app.use(express.urlencoded({ extended: true }));
 //adding
 
 //delete
-app.delete('/deleteexpense', async (req, res) => {
-  const { user_id, expense_id } = req.query;
+app.delete('/expenses/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const userId = parseInt(req.query.user_id);
 
-  if (!user_id || !expense_id) {
-    return res.status(400).json({ error: "Missing user_id or expense_id" });
+  if (!id || !userId) {
+    return res.status(400).send('Missing id or user_id');
   }
 
-  try {
-    const [result] = await promiseDb.query(
-      "DELETE FROM expenses WHERE id = ? AND user_id = ?",
-      [expense_id, user_id]
-    );
-
-    if (result.affectedRows > 0) {
-      res.json({ message: "Deleted successfully" });
-    } else {
-      res.status(404).json({ error: "Expense not found or unauthorized" });
+  const sql = 'DELETE FROM expenses WHERE id = ? AND user_id = ?';
+  db.query(sql, [id, userId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Server error');
     }
-  } catch (err) {
-    console.error("Delete error:", err); // สำคัญมาก
-    res.status(500).json({ error: "Server error" });
-  }
+    if (result.affectedRows === 0) {
+      return res.status(404).send('Expense not found or unauthorized');
+    }
+    res.send('Deleted!');
+  });
 });
-
 
 
 //connection
