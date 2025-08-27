@@ -7,6 +7,7 @@ const con = require('./db');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+let expenses = [];
 //register password just for input initial user data
 app.post('/register', (req, res) => {
     const {username, password} = req.body;
@@ -55,6 +56,16 @@ app.post('/login', (req, res) => {
     })
 });
 //All expense
+app.get("/expenses/:userId", (req, res) => {
+  const userId = parseInt(req.params.userId); // อ่านค่าจาก URL
+  const userExpenses = expenses.filter(exp => exp.userId === userId);
+
+  res.status(200).json({
+    expenses: userExpenses.length > 0 ? userExpenses : [],
+    message: userExpenses.length === 0 ? "No expenses found" : undefined,
+  });
+});
+
  
 //Todays expense
 
