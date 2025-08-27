@@ -8,7 +8,6 @@ const con = require('./db');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 //register password just for input initial user data
 
 //login
