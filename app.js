@@ -7,7 +7,7 @@ const con = require('./db');
 //...........middleware........
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-let expenses = []; // mutable array to store expenses
+// let expenses = []; // mutable array to store expenses
 
 //register password just for input initial user data
 
@@ -16,17 +16,20 @@ let expenses = []; // mutable array to store expenses
 //All expense
  
 //Todays expense
-app.get("/expenses/today", (req, res) => {
+app.get("/expenses/today/:userId", (req, res) => {
+  const { userId } = req.params;
   const today = new Date().toISOString().substring(0, 10);
 
-  const todayExpenses = expenses.filter(exp => exp.date.startsWith(today));
+  const userExpenses = expenses.filter(
+    (exp) => exp.userId === parseInt(userId) && exp.date === today
+  );
 
-  res.status(200).json({
-    expenses: todayExpenses.length > 0 ? todayExpenses : [],
-    message: todayExpenses.length === 0 ? "No expenses for today" : undefined
-  });
+  if (userExpenses.length > 0) {
+    res.status(200).json({ expenses: userExpenses });
+  } else {
+    res.status(200).json({ expenses: [], message: "No expenses found for today" });
+  }
 });
-
 //seraching
 
 //adding
