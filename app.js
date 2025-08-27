@@ -7,6 +7,13 @@ const con = require('./db');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const expenses = [
+  { id: 1, item: "Groceries", amount: 500, date: "2023-10-27" },
+  { id: 2, item: "Dinner with friends", amount: 750, date: "2023-10-26" },
+  { id: 3, item: "Coffee", amount: 80, date: "2023-10-27" },
+  { id: 4, item: "Movie ticket", amount: 180, date: "2023-10-25" },
+];
+
 //register password just for input initial user data
 
 //login
@@ -23,7 +30,7 @@ app.get("/searching", (req, res) => {
     return res.status(400).send("Keyword is required");
   }
 
-  // กรองข้อมูลจาก keyword
+  // The 'expenses' variable is now defined at the top of the file
   const results = expenses.filter(exp =>
     exp.item.toLowerCase().includes(keyword)
   );
@@ -34,7 +41,6 @@ app.get("/searching", (req, res) => {
 
   res.json(results); // ส่ง JSON กลับไปให้ Dart
 });
-
 //adding
 
 //delete
