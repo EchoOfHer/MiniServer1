@@ -16,6 +16,24 @@ app.use(express.urlencoded({ extended: true }));
 //Todays expense
 
 //seraching
+app.get("/searching", (req, res) => {
+  const keyword = (req.query.q || "").toLowerCase();
+
+  if (!keyword) {
+    return res.status(400).send("Keyword is required");
+  }
+
+  // กรองข้อมูลจาก keyword
+  const results = expenses.filter(exp =>
+    exp.item.toLowerCase().includes(keyword)
+  );
+
+  if (results.length === 0) {
+    return res.status(200).send("No matching expenses found");
+  }
+
+  res.json(results); // ส่ง JSON กลับไปให้ Dart
+});
 
 //adding
 
