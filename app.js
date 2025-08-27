@@ -20,14 +20,19 @@ app.get("/expenses/today/:userId", (req, res) => {
   const { userId } = req.params;
   const today = new Date().toISOString().substring(0, 10);
 
-  const userExpenses = expenses.filter(
-    (exp) => exp.userId === parseInt(userId) && exp.date === today
-  );
+  try {
+    const userExpenses = expenses.filter(
+      (exp) => exp.userId === parseInt(userId) && exp.date === today
+    );
 
-  if (userExpenses.length > 0) {
-    res.status(200).json({ expenses: userExpenses });
-  } else {
-    res.status(200).json({ expenses: [], message: "No expenses found for today" });
+    if (userExpenses.length > 0) {
+      res.status(200).json({ expenses: userExpenses });
+    } else {
+      res.status(200).json({ expenses: [], message: "No expenses found for today" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 //seraching
