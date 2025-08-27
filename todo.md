@@ -7,10 +7,10 @@
         Branch : [⏳] Searching-service
 
     3. Peach 
-        Branch : [⏳] Add-service    
-                 [⏳] Delete-service
+        Branch : [🎉] Add-service    
+                 [🎉] Delete-service
 
     4. Beam 
-        Branch : [⏳] Login-service
-        Branch : [⏳] Registration
+        Branch : [🎉] Login-service
+        
 
