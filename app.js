@@ -13,10 +13,13 @@ let expenses = [];
 //login
 
 //All expense
-app.get("/expenses", (req, res) => {
+app.get("/expenses/:userId", (req, res) => {
+  const userId = parseInt(req.params.userId);
+  const userExpenses = expenses.filter(exp => exp.userId === userId);
+
   res.status(200).json({
-    expenses: expenses.length > 0 ? expenses : [],
-    message: expenses.length === 0 ? "No expenses found" : undefined
+    expenses: userExpenses.length > 0 ? userExpenses : [],
+    message: userExpenses.length === 0 ? "No expenses found" : undefined
   });
 });
 
