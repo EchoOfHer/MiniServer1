@@ -17,24 +17,23 @@ let expenses = []; // mutable array to store expenses
  
 //Todays expense
 app.get("/expenses/today/:userId", (req, res) => {
-  const { userId } = req.params;
-  const today = new Date().toISOString().substring(0, 10);
+  const userId = parseInt(req.params.userId);
+  const today = new Date().toISOString().substring(0, 10); // "YYYY-MM-DD"
 
-  try {
-    const userExpenses = expenses.filter(
-      (exp) => exp.userId === parseInt(userId) && exp.date === today
-    );
-
-    if (userExpenses.length > 0) {
-      res.status(200).json({ expenses: userExpenses });
-    } else {
-      res.status(200).json({ expenses: [], message: "No expenses found for today" });
+  const sql = "SELECT * FROM expenses WHERE user_id = ? AND date = ?";
+  con.query(sql, [userId, today], (err, results) => {
+    if (err) {
+      console.error("Error fetching today's expenses:", err);
+      return res.status(500).json({ message: "Database error" });
     }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+
+    res.status(200).json({
+      expenses: results.length > 0 ? results : [],
+      message: results.length === 0 ? "No expenses found for today" : undefined
+    });
+  });
 });
+
 //seraching
 
 //adding
