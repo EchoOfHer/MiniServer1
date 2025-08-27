@@ -69,7 +69,7 @@ app.post("/addexpenses", (req, res) => {
     return res.status(400).json({ message: "Missing fields" });
   }
 
-  const sql = "INSERT INTO expense (user_id, item, paid, date) VALUES (?, ?, ?, NOW())";
+  const sql = "INSERT INTO expenses (user_id, item, paid, date) VALUES (?, ?, ?, NOW())";
   con.query(sql, [user_id, item, paid], (err, result) => {
     if (err) {
       console.error("Error inserting expense:", err);
