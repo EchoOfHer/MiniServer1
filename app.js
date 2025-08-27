@@ -20,27 +20,20 @@ app.use(express.urlencoded({ extended: true }));
 //adding
 
 //delete
-app.delete('/expenses/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const userId = parseInt(req.query.user_id);
-
-  if (!id || !userId) {
-    return res.status(400).send('Missing id or user_id');
-  }
-
-  const sql = 'DELETE FROM expenses WHERE id = ? AND user_id = ?';
-  db.query(sql, [id, userId], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Server error');
-    }
-    if (result.affectedRows === 0) {
-      return res.status(404).send('Expense not found or unauthorized');
-    }
-    res.send('Deleted!');
-  });
+app.delete('/expense/:id', (req, res) => {
+    const id = req.params.id;
+    const sql = "DELETE FROM expenses WHERE id = ?";
+    con.query(sql, [id], function(err, result) {
+        if (err) {
+            return res.status(500).send("Database error");
+        }
+        if (result.affectedRows > 0) {
+            res.sendStatus(200); // OK
+        } else {
+            res.status(404).send("Item not found");
+        }
+    });
 });
-
 
 //connection
 app.listen(3000, () => {
