@@ -7,7 +7,7 @@ const con = require('./db');
 //...........middleware........
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// let expenses = []; // mutable array to store expenses
+let expenses = []; // mutable array to store expenses
 
 //register password just for input initial user data
 
