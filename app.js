@@ -20,7 +20,7 @@ app.get("/expenses/today/:userId", (req, res) => {
   const userId = parseInt(req.params.userId);
   const today = new Date().toISOString().substring(0, 10); // "YYYY-MM-DD"
 
-  const sql = "SELECT * FROM expenses WHERE user_id = ? AND date = ?";
+ const sql = "SELECT * FROM expenses WHERE user_id = ? AND DATE(date) = ?";
   con.query(sql, [userId, today], (err, results) => {
     if (err) {
       console.error("Error fetching today's expenses:", err);
