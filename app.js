@@ -14,12 +14,12 @@ let expenses = [];
 
 //All expense
 app.get("/expenses/:userId", (req, res) => {
-  const userId = parseInt(req.params.userId);
+  const userId = parseInt(req.params.userId); // อ่านค่าจาก URL
   const userExpenses = expenses.filter(exp => exp.userId === userId);
 
   res.status(200).json({
     expenses: userExpenses.length > 0 ? userExpenses : [],
-    message: userExpenses.length === 0 ? "No expenses found" : undefined
+    message: userExpenses.length === 0 ? "No expenses found" : undefined,
   });
 });
 
