@@ -6,14 +6,6 @@ const con = require('./db');
 //...........middleware........
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-const expenses = [
-  { id: 1, item: "Groceries", amount: 500, date: "2023-10-27" },
-  { id: 2, item: "Dinner with friends", amount: 750, date: "2023-10-26" },
-  { id: 3, item: "Coffee", amount: 80, date: "2023-10-27" },
-  { id: 4, item: "Movie ticket", amount: 180, date: "2023-10-25" },
-];
-
 //register password just for input initial user data
 
 //login
@@ -24,23 +16,29 @@ const expenses = [
 
 //seraching
 app.get("/searching", (req, res) => {
-  const keyword = (req.query.q || "").toLowerCase();
+  const searchTerm = (req.query.q || "").toLowerCase();
 
-  if (!keyword) {
-    return res.status(400).send("Keyword is required");
+  if (!searchTerm) {
+    return res.status(400).send("Bad Request: Please provide a search term.");
   }
 
-  // The 'expenses' variable is now defined at the top of the file
-  const results = expenses.filter(exp =>
-    exp.item.toLowerCase().includes(keyword)
-  );
+  const sql = "SELECT * FROM expenses WHERE LOWER(item) LIKE ?";
+  const likeTerm = `%${searchTerm}%`;
 
-  if (results.length === 0) {
-    return res.status(200).send("No matching expenses found");
-  }
+  con.query(sql, [likeTerm], (err, results) => {
+    if (err) {
+      console.error("Database query error:", err);
+      return res.status(500).send("Server Error: Unable to search expenses.");
+    }
 
-  res.json(results); // ส่ง JSON กลับไปให้ Dart
+    if (results.length > 0) {
+      res.status(200).json(results);
+    } else {
+      res.status(200).send(`No item: ${searchTerm}`);
+    }
+  });
 });
+
 //adding
 
 //delete
